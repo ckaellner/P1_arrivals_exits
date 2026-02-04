@@ -9,20 +9,27 @@ This repository is the codebase for the paper:
 
 ## Methodology
 ### 1. Data Disaggregation
-Migration data across three key dimensions:
+Migration data is disaggregated across three key dimensions:
 - **Demographic:** Specific age-cohorts (Age Groups).
 - **Nationality:** Top 25 Diaspora populations (by citizenship).
-- **Spatial:** Subnational units (Municipalities and State-Urbanisation-Classification).
+- **Spatial:** Subnational units (municipalities and state-urbanisation-classification).
 
 ### 2. Modelling
 We assume that arrivals ($A$) and exits ($E$) for a given unit follow independent Poisson processes:
-$$A \sim \text{Poisson}(\lambda)$$
-$$E \sim \text{Poisson}(\gamma)$$
+$$A_i \sim \text{Poisson}(\lambda_i)$$ and 
+$$E_i \sim \text{Poisson}(\gamma_i)$$.
 
 The net migration $N = A - E$ is therefore modeled by a **Skellam distribution**. This allows us to estimate:
-- **$\lambda$ (Lambda):** Daily intensity of arrivals.
-- **$\gamma$ (Gamma):** Daily intensity of exits.
-- **Net Flow:** $\lambda - \gamma$.
+- **$\lambda_i$:** Daily intensity of arrivals.
+- **$\gamma_i$:** Daily intensity of exits.
+- **Net Flow:** $\lambda_i - \gamma_i$.
 
 ### 3. Parameter Estimation
-Parameters are estimated using a cumulative flow fitting method (integrated into `f_skellam_analysis`), ensuring the model captures long-term trends while accounting for daily variance.
+To account for the noise of daily migration rates on the subnational scale and specific demographic groups, we use a cumulative flow fitting method. Therefore, instead of averaging daily counts, we estimate the intensities $\lambda_i§ and $\gamma_i$ given by
+
+$$\hat{\lambda} = \frac{6 \sum_{t=1}^{n} t M_t}{n(n+1)(2n+1)}$$
+
+**Where:**
+* $n$ is the total number of days in the observation period.
+* $t$ is the specific day index.
+* $M_t$ is the cumulative count of arrivals or exits up to day $t$.
