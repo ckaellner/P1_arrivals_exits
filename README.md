@@ -1,5 +1,5 @@
 # Subnational Migration Analysis
-This repository provides the computational framework and analytical pipeline for modeling subnational migration flows by disaggregating national level flows to specific demographic groups on a subnational levels. 
+This repository provides the computational framework and analytical pipeline for modelling subnational migration flows by disaggregating national level flows to specific demographic groups on a subnational levels. 
 By treating arrivals and exits as independent Poisson processes, we utilize the Skellam Distribution to analyze net migration dynamics across various demographic and spatial dimensions.
 
 This repository is the codebase for the paper:  
