@@ -10,7 +10,7 @@ Migration data is disaggregated across three key dimensions:
 - **Nationality:** Top 25 Diaspora populations (by citizenship).
 - **Spatial:** Subnational units (municipalities and state-urbanisation-classification).
 
-**Data Disclosure**: The analysis is based on a high-resolution, confidential dataset of individual-level administrative records. To comply with data protection regulations and confidentiality agreements, the raw micro-data is not public. However, this repository provides the weekly aggregated matrices used to generate the paper's findings, allowing for reproducibility of the results.
+> **Data Disclosure**: The analysis is based on a high-resolution, confidential dataset of individual-level administrative records. To comply with data protection regulations and confidentiality agreements, the raw micro-data is not public. However, this repository provides the weekly aggregated matrices used to generate the paper's findings, allowing for reproducibility of the results.
 
 ## Methodology
 ### 1. Modelling
