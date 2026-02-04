@@ -15,8 +15,8 @@ Migration data is disaggregated across three key dimensions:
 ## Methodology
 ### 1. Modelling
 We assume that arrivals ($A$) and exits ($E$) for a given unit follow independent Poisson processes:
-$$A_i \sim \text{Poisson}(\lambda_i)$$ and 
-$$E_i \sim \text{Poisson}(\gamma_i)$$.
+$$A_i(t) \sim \text{Poisson}(\lambda_it)$$ and 
+$$E_i(t) \sim \text{Poisson}(\gamma_it)$$.
 
 The net migration $N = A - E$ is therefore modeled by a Skellam distribution. This allows us to estimate:
 - **$\lambda_i$:** Daily intensity of arrivals.
