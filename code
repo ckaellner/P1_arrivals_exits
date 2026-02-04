@@ -1,0 +1,31 @@
+# 1. Functions
+f_poisson_fitting <- function(weekly_counts) {
+  n <- length(weekly_counts)
+  w <- 1:n
+  M_w <- cumsum(weekly_counts) 
+  
+  weekly_intensity <- (6 * sum(w * M_w)) / (n * (n + 1) * (2 * n + 1))
+  
+  daily_rate <- weekly_intensity / 7
+  
+  return(daily_rate)
+}
+
+f_skellam_analysis <- function(arrival_matrix, exit_matrix) {
+  lambda_hats <- apply(A_matrix, 1, f_poisson_fitting)
+  gamma_hats  <- apply(E_matrix, 1, f_poisson_fitting)
+  
+  # Combine into the results table used for Appendix tables
+  results <- data.frame(
+    unit_id       = rownames(A_matrix),
+    lambda_daily  = lambda_hats,
+    gamma_daily   = gamma_hats,
+    net_daily     = lambda_hats - gamma_hats,
+    stringsAsFactors = FALSE
+  )
+  
+  return(results)
+}
+
+  # 2. Data
+  
