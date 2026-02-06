@@ -1,4 +1,5 @@
 # 1. Functions
+## a. Analysis
 f_poisson_fitting <- function(weekly_counts) {
   n <- length(weekly_counts)
   w <- 1:n
@@ -12,12 +13,12 @@ f_poisson_fitting <- function(weekly_counts) {
 }
 
 f_skellam_analysis <- function(arrival_matrix, exit_matrix) {
-  lambda_hats <- apply(A_matrix, 1, f_poisson_fitting)
-  gamma_hats  <- apply(E_matrix, 1, f_poisson_fitting)
+  lambda_hats <- apply(arrival_matrix, 1, f_poisson_fitting)
+  gamma_hats  <- apply(exit_matrix, 1, f_poisson_fitting)
   
   # Combine into the results table used for Appendix tables
   results <- data.frame(
-    unit_id       = rownames(A_matrix),
+    unit_id       = rownames(arrival_matrix),
     lambda_daily  = lambda_hats,
     gamma_daily   = gamma_hats,
     net_daily     = lambda_hats - gamma_hats,
@@ -27,5 +28,143 @@ f_skellam_analysis <- function(arrival_matrix, exit_matrix) {
   return(results)
 }
 
-  # 2. Data
+## b. Plots
+plot_arrivals_exits <- function(skellam_analysis) {
   
+  # 1. Maximum Value
+  max_val <- max(c(skellam_analysis$lambda_daily, skellam_analysis$gamma_daily), na.rm = TRUE)
+  
+  # 2. Initiation Plot
+  plot(skellam_analysis$lambda_daily, skellam_analysis$gamma_daily,
+       pch = 16, 
+       col = adjustcolor("black", alpha.f = 0.5), 
+       xlim = c(0, max_val), 
+       ylim = c(0, max_val),
+       axes = FALSE, 
+       xlab = expression(hat(lambda)[i]),
+       ylab = expression(hat(gamma)[i]), 
+       las = 1, 
+       main = "Arrivals and Exits")
+  
+  # 3. Identity Line
+  abline(a = 0, b = 1, lty = 2, col = "gray50", lwd = 1)
+  
+  # 4. Axes
+  axis(1, lwd = 1.2, tck = -0.015, cex.axis = 0.8)
+  axis(2, lwd = 1.2, tck = -0.015, cex.axis = 0.8, las = 1)
+  
+  # 5. Labels
+  text(skellam_analysis$lambda_daily, skellam_analysis$gamma_daily, 
+       labels = row.names(skellam_analysis), 
+       pos = 4,      
+       cex = 0.6,
+       col = "black",
+       xpd = TRUE)
+  
+}
+
+plot_age_structure <- function(skellam_analysis){
+  # 1. Data
+  ages <- 2:100
+  arrivals <- skellam_analysis$lambda_daily
+  exits <- -skellam_analysis$gamma_daily
+  net <- arrivals + exits
+  
+  # 2. Axes Ranges
+  y_min <- floor(min(exits, na.rm = TRUE) / 5) * 5
+  y_max <- ceiling(max(arrivals, na.rm = TRUE) / 5) * 5
+  shared_range <- c(y_min, y_max)
+  
+  # 3. Arrivals
+  plot(x = ages, y = arrivals,
+       type = "l",      
+       lwd = 2,           
+       lty = 2,         
+       col = "#4178B0", 
+       xlim = c(0, 100),
+       ylim = shared_range,      
+       xaxs = "i",           
+       yaxs = "i",
+       axes = FALSE,
+       xlab = "Ages",
+       ylab = "Flow",
+       main = "Age-Structure Arrivals and Exits")
+  
+  # 4. Exits
+  lines(x = ages, y = exits, 
+        lwd = 2, 
+        lty = 2,     
+        col = "#A0394A")
+  
+  # 5. Net
+  lines(x = ages, y = net,
+        lwd = 2.5,
+        lty = 1, 
+        col = "#686E75")
+  
+  # 6. Horizontal Baseline
+  abline(h = 0, col = "gray80", lwd = 1)
+  
+  # 7. Axes
+  at_x <- seq(0, 100, by = 5)
+  at_y <- seq(y_min, y_max, by = 5)
+  
+  axis(1, at = at_x, lwd = 1.2, tck = -0.015, cex.axis = 0.7)
+  axis(2, at = at_y, lwd = 1.2, tck = -0.015, cex.axis = 0.7, las = 1)
+  
+  # 8. Legend
+  legend("topright", 
+         legend = c("Arrivals", "Exits", "Net"),
+         col = c("#4178B0", "#A0394A", "#686E75"),
+         lty = c(2, 2, 1),
+         lwd = c(1.5, 1.5, 2.5),
+         bty = "n",
+         cex = 0.8)
+}
+
+# 2. Data
+# Data tables for arrivals and exits by age, nationality, and age-cohort arrivals exits by the in the paper introduces state-urbanisation-classification can be found in the folder "git_data" within this repository.
+
+## a. Nationality:
+arrivals_citizenship <- as.matrix(read.csv("git_data/arrivals_citizenship.csv", row.names = 1, check.names = FALSE))
+exits_citizenship <- as.matrix(read.csv("git_data/exits_citizenship.csv", row.names = 1, check.names = FALSE))
+  
+## b. Age:
+arrivals_age <- as.matrix(read.csv("git_data/arrivals_age.csv", row.names = 1, check.names = FALSE))
+exits_age <- as.matrix(read.csv("git_data/exits_age.csv", row.names = 1, check.names = FALSE))
+  
+  
+## c. Age-cohort arrivals/exits by state-urbanisation-classification:
+### Children
+# arrivals_children <- as.matrix(read.csv("git_data/age_cohorts/arrivals_children.csv", row.names = 1, check.names = FALSE))
+# exits_children <- as.matrix(read.csv("git_data/age_cohorts/exits_children.csv", row.names = 1, check.names = FALSE))
+
+### Young Adults
+# arrivals_young_adults <- as.matrix(read.csv("git_data/age_cohorts/arrivals_young_adults.csv", row.names = 1, check.names = FALSE))
+# exits_young_adults <- as.matrix(read.csv("git_data/age_cohorts/exits_young_adults.csv", row.names = 1, check.names = FALSE))
+
+### Middle-Aged Adults
+# arrivals_middle_aged_adults <- as.matrix(read.csv("git_data/age_cohorts/arrivals_middle_aged_adults.csv", row.names = 1, check.names = FALSE))
+# exits_middle_aged_adults <- as.matrix(read.csv("git_data/age_cohorts/exits_middle_aged_adults.csv", row.names = 1, check.names = FALSE))
+
+### Older Adults
+# arrivals_older_adults <- as.matrix(read.csv("git_data/age_cohorts/arrivals_older_adults.csv", row.names = 1, check.names = FALSE))
+# exits_older_adults <- as.matrix(read.csv("git_data/age_cohorts/exits_older_adults.csv", row.names = 1, check.names = FALSE))
+
+### Seniors
+# arrivals_seniors <- as.matrix(read.csv("git_data/age_cohorts/arrivals_seniors.csv", row.names = 1, check.names = FALSE))
+# exits_seniors <- as.matrix(read.csv("git_data/age_cohorts/exits_seniors.csv", row.names = 1, check.names = FALSE))
+
+# 3. Analysis
+
+## a. Nationality
+analysis_citizenship <- f_skellam_analysis(arrival_matrix = arrivals_citizenship, 
+                                           exit_matrix = exits_citizenship)
+
+plot_arrivals_exits(analysis_citizenship)
+
+## b. Age
+analysis_age <- f_skellam_analysis(arrival_matrix = arrivals_age, 
+                                   exit_matrix = exits_age)
+
+plot_age_structure(analysis_age)
