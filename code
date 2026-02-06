@@ -156,7 +156,6 @@ exits_age <- as.matrix(read.csv("git_data/exits_age.csv", row.names = 1, check.n
 # exits_seniors <- as.matrix(read.csv("git_data/age_cohorts/exits_seniors.csv", row.names = 1, check.names = FALSE))
 
 # 3. Analysis
-
 ## a. Nationality
 analysis_citizenship <- f_skellam_analysis(arrival_matrix = arrivals_citizenship, 
                                            exit_matrix = exits_citizenship)
