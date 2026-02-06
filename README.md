@@ -1,5 +1,5 @@
 # Subnational Migration Analysis
-This repository provides the computational framework and analytical pipeline for modelling subnational migration flows by disaggregating national level flows to specific demographic groups on a subnational levels. 
+This repository provides the computational framework and analytical pipeline for modelling subnational migration flows of specific demographic groups and on a subnational geographical level. 
 By treating arrivals and exits as independent Poisson processes, we utilize the Skellam Distribution to analyze net migration dynamics across various demographic and spatial dimensions.
 
 This repository is the codebase for the paper:  
@@ -24,7 +24,7 @@ The net migration $N = A - E$ is therefore modeled by a Skellam distribution. Th
 - **$\lambda_i - \gamma_i$:** Net daily migration flow.
 
 ### 2. Parameter Estimation
-To account for the noise of daily migration rates on the subnational scale and specific demographic groups, we use a cumulative flow fitting method. Therefore, instead of averaging daily counts, we estimate the intensities $\lambda_i§ and $\gamma_i$ given by
+To account for the noise of daily migration rates on the subnational scale and specific demographic groups, we use a cumulative flow fitting method. Therefore, instead of averaging daily counts, we estimate the intensities $\lambda_i$ and $\gamma_i$ given by
 
 $$\hat{\lambda} = \frac{6 \sum_{t=1}^{n} t M_t}{n(n+1)(2n+1)}$$
 
@@ -33,5 +33,24 @@ $$\hat{\lambda} = \frac{6 \sum_{t=1}^{n} t M_t}{n(n+1)(2n+1)}$$
 * $t$ is the specific day index.
 * $M_t$ is the cumulative count of arrivals or exits up to day $t$.
 
-### 3. Code
-This repository provides the processed subnational datasets and the scripts required to reproduce the analysis.
+## Code
+This repository contains the R code used to analyze and visualize the intensity of arrivals and exits (flows) across different demographic categories such as nationality and age. The provided script works as follows:
+
+### 1. Functions
+#### a. Mathematical Functions
+* **`f_poisson_fitting(weekly_counts)`**: Calculates a daily intensity rate from a vector of weekly arrival/exit counts.
+* **`f_skellam_analysis(arrival_matrix, exit_matrix)`**: Processes entire matrices of arrival and exit data. It returns a structured data frame containing the daily arrival rate ($\hat{\lambda}_i$), daily exit rate ($\hat{\gamma_i}$), and the net flow.
+
+#### b. Visualizations
+* **`plot_arrivals_exits(skellam_analysis)`**: Scatter plot that compares arrival intensity against exit intensity. 
+    * Points below the **dashed identity line** ($\hat{\lambda}=\hat{\gamma}$) indicate units with positive net growth.
+* **`plot_age_structure(skellam_analysis)`**: A mirrored line plot specifically designed for age-based data (ages 2–100).
+    * **Blue dashed line**: Positive arrival intensity ($\hat{\lambda}_i$).
+    * **Red dashed line**: Negative exit intensity ($-\hat{\gamma}_i$).
+    * **Solid Grey line**: The Net flow, highlighting which age groups are growing or shrinking.
+
+### 2. Data
+The scripts are designed to work with CSV files stored in a "git_data/" folder provided in this repository. By running the entire code, data stored in the same structure as in this repository will be called by the code into the R environment.
+
+### 3. Analysis
+To run the analysis, call the **`f_skellam_analysis(arrival_matrix, exit_matrix)`** function with the correpsonding datasets. The resulting dataframes for age and nationality can be visualized using **`plot_arrivals_exits(skellam_analysis)`** and **`plot_age_structure(skellam_analysis)`**; for age-cohort and state-urbanisation specific analysis no specific visualization is provided
