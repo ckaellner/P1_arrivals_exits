@@ -1,4 +1,4 @@
-# Subnational Migration Analysis
+# Subnational Migration Analysis [![DOI](https://zenodo.org/badge/1149565194.svg)](https://doi.org/10.5281/zenodo.18507927)
 This repository provides the computational framework and analytical pipeline for modelling subnational migration flows of specific demographic groups and on a subnational geographical level. 
 By treating arrivals and exits as independent Poisson processes, we utilize the Skellam Distribution to analyze net migration dynamics across various demographic and spatial dimensions.
 
@@ -11,8 +11,6 @@ Migration data is disaggregated across three key dimensions:
 - **Spatial:** Subnational units (municipalities and state-urbanisation-classification).
 
 > **Data Disclosure**: The analysis is based on a high-resolution, confidential dataset of individual-level administrative records. To comply with data protection regulations and confidentiality agreements, the raw micro-data is not public. However, this repository provides the weekly aggregated matrices used to generate the paper's findings, allowing for reproducibility of the results.
-
-Current Zenodo snapshot of the repository: [![DOI](https://zenodo.org/badge/1149565194.svg)](https://doi.org/10.5281/zenodo.18507927)
 
 ## Methodology
 ### 1. Modelling
